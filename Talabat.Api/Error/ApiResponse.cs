@@ -1,12 +1,12 @@
 ﻿namespace Talabat.Api.Error
 {
-    public class ApiResponce
+    public class ApiResponse
     {
         // This class To Get Api DefultResponse 
         public int StatusCode { set; get; }
         public string? Message { set; get; }
 
-        public ApiResponce(int statusCode, string? message=null)
+        public ApiResponse(int statusCode, string? message=null)
         {
             StatusCode = statusCode;
             Message = message ?? GetDefultMessageForStatusCode(StatusCode);

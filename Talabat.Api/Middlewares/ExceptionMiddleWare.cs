@@ -32,7 +32,7 @@ namespace Talabat.Api.Middlewares
                     ? new ApiExceptionResponce((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
                     : new ApiExceptionResponce((int)HttpStatusCode.InternalServerError);
                 var jsonResponse = JsonSerializer.Serialize(Response);
-                context.Response.WriteAsync(jsonResponse);
+             await context.Response.WriteAsync(jsonResponse);
             }
         }
 

@@ -38,7 +38,7 @@ namespace Talabat.Api.Controllers
         {
             if(CheckEmailExist (model.Email).Result.Value)
             {
-                return BadRequest(new ApiResponce(400, "Email Is Already In Use"));
+                return BadRequest(new ApiResponse(400, "Email Is Already In Use"));
             }
             var user = new AppUser
             {
@@ -48,7 +48,7 @@ namespace Talabat.Api.Controllers
                 PhoneNumber = model.PhoneNumber
             };
             var result = await _userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded) return BadRequest(new ApiResponce(400));
+            if (!result.Succeeded) return BadRequest(new ApiResponse(400));
             var returndUser = new UserDto
             {
                 Email = user.Email,
@@ -63,10 +63,10 @@ namespace Talabat.Api.Controllers
         public async Task<ActionResult<UserDto>> Login(LoginDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user is null) return Unauthorized(new ApiResponce(401));
+            if (user is null) return Unauthorized(new ApiResponse(401));
 
           var result= await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
-            if(result is null )return Unauthorized(new ApiResponce(401));
+            if(result is null )return Unauthorized(new ApiResponse(401));
             var returned = new UserDto
             {
                 DisplayName = user.DisplayName,
@@ -111,7 +111,7 @@ namespace Talabat.Api.Controllers
             mappedAddress.Id = user.Address.Id;
             user.Address = mappedAddress;
             var result = await _userManager.UpdateAsync(user);
-            if (!result.Succeeded) return BadRequest(new ApiResponce(400));
+            if (!result.Succeeded) return BadRequest(new ApiResponse(400));
             return Ok(UpdatedAddress);
         }
         [HttpGet("EmailExist")]

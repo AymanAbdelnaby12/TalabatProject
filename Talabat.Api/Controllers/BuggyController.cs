@@ -18,7 +18,7 @@ namespace Talabat.Api.Controllers
         public ActionResult GetFoundRequest()
         {
             var product = _dbContext.Products.Find(100);
-            if (product is null) return NotFound(new ApiResponce(404));
+            if (product is null) return NotFound(new ApiResponse(404));
             return Ok(product);
         }
         [HttpGet("ServerError")]

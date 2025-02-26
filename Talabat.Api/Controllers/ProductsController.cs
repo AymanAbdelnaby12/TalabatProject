@@ -49,7 +49,7 @@ namespace Talabat.Api.Controllers
         {
             var spec = new ProductWithBrandAndTypeSpecification(id);
             var product = await _ProductRepository.GetByIdWithSpcAsync(spec);
-            if (product is null) return NotFound(new ApiResponce(404));
+            if (product is null) return NotFound(new ApiResponse(404));
             var mappedProduct = _mapper.Map<Product,ProductDto>(product);
             return Ok(mappedProduct);
         }
@@ -67,7 +67,7 @@ namespace Talabat.Api.Controllers
         public async Task<ActionResult<ProductType>> GetProductTypesById(int id)
         {
            var ProductType =await _productTypeRepository.GetByIdAsync(id);
-            if (ProductType is null) return NotFound(new ApiResponce(404));
+            if (ProductType is null) return NotFound(new ApiResponse(404));
             return Ok(ProductType);
         }
 
@@ -84,7 +84,7 @@ namespace Talabat.Api.Controllers
         public async Task<ActionResult<ProductBrand>> GetProductBrandById(int id)
         {
             var ProductBrand = await _productBrandRepository.GetByIdAsync(id);
-            if (ProductBrand is null) return NotFound(new ApiResponce(404));
+            if (ProductBrand is null) return NotFound(new ApiResponse(404));
             return Ok(ProductBrand);
         }
 

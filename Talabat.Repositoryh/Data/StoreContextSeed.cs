@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Talabat.Core.Models;
+using Talabat.Core.Models.Order_Aggregate;
 
 namespace Talabat.Repository.Data
 {
@@ -61,6 +62,21 @@ namespace Talabat.Repository.Data
                 }
             }
 
+            // seed data for delivery methods
+            if (!DbContext.Set<DeliveryMethod>().Any())
+            {
+
+                var DeliveryMethodData = File.ReadAllText("C:\\Users\\AymanAbdelnaby\\source\\repos\\Talabat\\Talabat.Repositoryh\\Data\\DataSeeding\\delivery.json");
+                var DeliveryMethods = JsonSerializer.Deserialize<List<DeliveryMethod>>(DeliveryMethodData);
+                if (DeliveryMethods?.Count > 0)  
+                {
+                    foreach (var DeliveryMethod in DeliveryMethods)
+                    {
+                        await DbContext.Set<DeliveryMethod>().AddAsync(DeliveryMethod);
+                    }
+                    await DbContext.SaveChangesAsync();
+                }
+            }
         }
     }
 }

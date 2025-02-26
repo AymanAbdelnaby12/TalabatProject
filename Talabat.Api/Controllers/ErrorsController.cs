@@ -13,7 +13,7 @@ namespace Talabat.Api.Controllers
     {
         public ActionResult Error(int code)
         {
-            return NotFound(new ApiResponce(code));
+            return NotFound(new ApiResponse(code));
         }
     }
 }

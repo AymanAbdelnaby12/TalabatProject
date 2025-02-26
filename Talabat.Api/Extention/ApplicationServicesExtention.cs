@@ -3,6 +3,7 @@ using Talabat.Api.Error;
 using Talabat.Api.Helper;
 using Talabat.Core.Interfaces_Or_Repository;
 using Talabat.Repository;
+using Talabat.Services;
 
 namespace Talabat.Api.Extention
 {
@@ -12,7 +13,6 @@ namespace Talabat.Api.Extention
         {
             Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             Services.AddAutoMapper(typeof(MapperFile));
-
             #region Way To Configure The ApiBehaviorOptions To Return The Validation Error
             // This is The Way To Configure The ApiBehaviorOptions To Return The Validation Error
             Services.Configure<ApiBehaviorOptions>(options =>
@@ -32,6 +32,9 @@ namespace Talabat.Api.Extention
                 };
             });
             #endregion
+            Services.AddScoped<IBasketRepository, BasketRepository>();
+            Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            Services.AddScoped<IOrderService, OrderService>();
             return Services;
         }
     }

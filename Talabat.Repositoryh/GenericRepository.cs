@@ -11,7 +11,8 @@ using Talabat.Repository.Data;
 
 namespace Talabat.Repository
 {
-   public  class GenericRepository<T> : IGenericRepository<T> where T : BaseModel
+
+    public class GenericRepository<T> : IGenericRepository<T> where T : BaseModel
    {
         private readonly StoreContext _context;
 
@@ -48,5 +49,16 @@ namespace Talabat.Repository
         {
             return await ApplySpec(spec).CountAsync();
         }
+
+        public async Task AddAsync(T entity)
+        => _context.Set<T>().Add(entity);
+
+        public void UpdateAsync(T entity)
+        => _context.Set<T>().Update(entity);
+
+        public void DeleteAsync(T entity)
+        => _context.Set<T>().Remove(entity);
+
+       
     }
 }
