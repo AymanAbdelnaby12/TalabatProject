@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Talabat.Api.Error;
 using Talabat.Api.Helper;
+using Talabat.Core;
 using Talabat.Core.Interfaces_Or_Repository;
+using Talabat.Core.Services;
 using Talabat.Repository;
 using Talabat.Services;
 

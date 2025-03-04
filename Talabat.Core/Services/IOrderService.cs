@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Talabat.Core.Models.Order_Aggregate;
 
-namespace Talabat.Core.Interfaces_Or_Repository
+namespace Talabat.Core.Services
 {
     public interface IOrderService
     {

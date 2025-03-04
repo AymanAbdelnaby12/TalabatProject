@@ -12,9 +12,11 @@ using Talabat.Api.Middlewares;
 using Talabat.Core.Interfaces_Or_Repository;
 using Talabat.Core.Models;
 using Talabat.Core.Models.Identity;
+using Talabat.Core.Services;
 using Talabat.Repository;
 using Talabat.Repository.Data;
 using Talabat.Repository.Identity;
+using Talabat.Services;
 
 
 internal class Program
@@ -47,6 +49,7 @@ internal class Program
         });
 
         builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+        builder.Services.AddScoped<IPaymentService, PaymentService>();
 
         builder.Services.AddApplicationServices();
         builder.Services.AddIdentityServices(builder.Configuration);

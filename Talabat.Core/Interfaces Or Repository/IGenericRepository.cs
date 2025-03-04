@@ -13,7 +13,7 @@ namespace Talabat.Core.Interfaces_Or_Repository
         Task<T> GetByIdAsync(int id);
         Task<IReadOnlyList<T>> GetAllAsync();
 
-        Task<T> GetByIdWithSpcAsync(ISpecifications<T> spec);
+        Task<T> GetEntityWithSpecAsync(ISpecifications<T> spec);
         Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec);
         Task<int> CountAsync(ISpecifications<T> spec);
         Task AddAsync(T entity);

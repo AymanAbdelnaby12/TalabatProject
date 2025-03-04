@@ -1,12 +1,16 @@
-﻿using System;
+﻿using Stripe;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Talabat.Core;
 using Talabat.Core.Interfaces_Or_Repository;
 using Talabat.Core.Models;
 using Talabat.Core.Models.Order_Aggregate;
+using Talabat.Core.Services;
 using Talabat.Core.Specifications.OrderSpec;
+using Address = Talabat.Core.Models.Order_Aggregate.Address;
 
 namespace Talabat.Services
 {
@@ -17,14 +21,14 @@ namespace Talabat.Services
         //private readonly IGenericRepository<Product> _productRepository;
         //private readonly IGenericRepository<DeliveryMethod> _deliveryMethodRepository;  
         //private readonly IGenericRepository<Order> _orderRepository;
-
-        public OrderService(IBasketRepository basketRepository, IUnitOfWork unitOfWork)
+        private readonly IPaymentService _paymentService;
+        public OrderService(IBasketRepository basketRepository, IUnitOfWork unitOfWork, IPaymentService paymentService)
             // IGenericRepository<Product> productRepository,IGenericRepository<DeliveryMethod> deliveryMethodRepository,
             //IGenericRepository<Order> orderRepository)
         {
             _basketRepository = basketRepository;
             _unitOfWork = unitOfWork;
-
+            _paymentService = paymentService;
             //_productRepository = productRepository;
             //_deliveryMethodRepository = deliveryMethodRepository;
             //_orderRepository = orderRepository;
@@ -40,7 +44,7 @@ namespace Talabat.Services
             {
                 foreach (var item in Basket.Items)
                 {
-                    var product = await _unitOfWork.Repository<Product>().GetByIdAsync(item.Id);
+                    var product = await _unitOfWork.Repository<Core.Models.Product>().GetByIdAsync(item.Id);
                     var itemOrdered = new ProductItemOrderd(product.Id, product.Name, product.PictureUrl);
                     var orderItem = new OrderItem(itemOrdered, product.Price, item.Quantity);
                     OrderItems.Add(orderItem);
@@ -52,7 +56,16 @@ namespace Talabat.Services
             //4. Get Delivery Method
             var deliveryMethod = await _unitOfWork.Repository<DeliveryMethod>().GetByIdAsync(DeliveryMethodId);
             //5. create order
-            var order = new Order(BuyerEmail, ShippingAddress, deliveryMethod, OrderItems, subtotal);
+            var spec= new OrderWithPaymentIntentSpec(Basket.PaymentIntentId);
+            var ExOrder =await _unitOfWork.Repository<Order>().GetEntityWithSpecAsync(spec);
+            if (ExOrder is not null)
+            {
+                _unitOfWork.Repository<Order>().DeleteAsync(ExOrder);
+              await  _paymentService.CreateOrUpdatePaymentIntent(BasketId);
+
+            }
+            var order = new Order(BuyerEmail, ShippingAddress, deliveryMethod, OrderItems, subtotal,Basket.PaymentIntentId);
+
             //6.add order locally
             await _unitOfWork.Repository<Order>().AddAsync(order);
             //7. save to db
@@ -74,7 +87,7 @@ namespace Talabat.Services
         public async Task<Order?> GetOrderById(int OrderId, string BuyerEmail)
         {
             var spec = new OrderSpec(BuyerEmail, OrderId);
-            var order = await _unitOfWork.Repository<Order>().GetByIdWithSpcAsync(spec);
+            var order = await _unitOfWork.Repository<Order>().GetEntityWithSpecAsync(spec);
             return order;
         }
     }

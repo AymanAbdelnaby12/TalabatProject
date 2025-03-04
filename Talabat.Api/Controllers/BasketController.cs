@@ -12,7 +12,7 @@ namespace Talabat.Api.Controllers
     [ApiController]
     public class BasketController : ControllerBase
     {
-        private readonly IBasketRepository _basketRepository;
+        private readonly IBasketRepository _basketRepository;    
         private readonly IMapper _mapper;
 
         public BasketController(IBasketRepository basketRepository, IMapper mapper)
